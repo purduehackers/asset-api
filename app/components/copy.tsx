@@ -1,15 +1,19 @@
-import copyToClipBoard from "../utils/copy-to-clipboard";
+import copyToClipBoard from '../utils/copy-to-clipboard'
 
 interface CopyI {
-    url: string
+  url: string
 }
 
-const Copy = ({url}: CopyI) => {
-    return (
-        <button onClick={() => {
-            copyToClipBoard(url)
-        }}>copy</button>
-    )
+const Copy = ({ url }: CopyI) => {
+  return (
+    <button
+      onClick={() => {
+        copyToClipBoard(url)
+      }}
+    >
+      copy
+    </button>
+  )
 }
 
-export default Copy;
+export default Copy
