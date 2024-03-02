@@ -1,5 +1,6 @@
 'use client'
-import {uploadFile, getFile} from './actions/uploadFile'
+import uploadFile from './actions/uploadFile'
+import getFile from './actions/getFile'
 import { FormEvent, useEffect, useState } from 'react'
 import Image from 'next/image'
  
@@ -50,7 +51,7 @@ export default function Home() {
         }} />
         <button>Submit</button>
       </form>
-      <Image src={url} alt="" width={100} height={100}></Image>
+      <Image src={"http://localhost:3000/api/0_mask.png"} alt="" width={100} height={100}></Image>
     </div>
   )
 }

@@ -1,6 +1,5 @@
 "use server"
 import { GetObjectCommand, S3Client } from "@aws-sdk/client-s3";
-import { PutObjectCommand } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 const S3 = new S3Client({
@@ -12,17 +11,17 @@ const S3 = new S3Client({
     },
 });  
 
-const uploadFile = async (formData: FormData) => {
+const getFile = async (filename: string) => {
     const preSignedUrl = await getSignedUrl(
         S3,
-        new PutObjectCommand(
+        new GetObjectCommand(
             { 
                 Bucket: process.env.R2_UPLOAD_BUCKET,
-                Key: formData.get('filename') as string
+                Key: filename
             }), {
                 expiresIn: 3600
             })
     return preSignedUrl
 }
 
-export default uploadFile
+export default getFile
