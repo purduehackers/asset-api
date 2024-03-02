@@ -1,5 +1,6 @@
-import getFile from '../../actions/getFile'
 import { redirect } from 'next/navigation'
+
+import getFile from '../../actions/getFile'
 
 interface paramsI {
   params: {

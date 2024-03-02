@@ -1,7 +1,8 @@
 'use client'
 import Image from 'next/image'
+import { useEffect, useState } from 'react'
+
 import Copy from '../components/copy'
-import { useState, useEffect } from 'react'
 import styles from './styles.module.css'
 
 const ProjectPage = () => {
