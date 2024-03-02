@@ -8,9 +8,7 @@ const ProjectPage = () => {
   const [keys, setKeys] = useState([])
 
   const fetchAndSetKeys = async () => {
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_APP_URL}/api/keys` || ''
-    )
+    const response = await fetch('/api/keys')
     const data = await response.json()
     setKeys(data.keys)
   }
