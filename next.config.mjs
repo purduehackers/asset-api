@@ -5,6 +5,10 @@ const nextConfig = {
             {
                 protocol: "http",
                 hostname: "localhost"
+            },
+            {
+                protocol: "https",
+                hostname: "asset-api.vercel.app"
             }
         ]
     }
