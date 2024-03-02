@@ -39,7 +39,7 @@ const ProjectPage = () => {
           </thead>
           {keys &&
             keys.map((key) => {
-              const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/${key}`
+              const url = `/api/${key}`
               return (
                 <tr className="bg-gray-900 border-b border-gray-700" key={key}>
                   <th
