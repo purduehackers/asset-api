@@ -8,7 +8,7 @@ const ProjectPage = () => {
   const [keys, setKeys] = useState([])
 
   const fetchAndSetKeys = async () => {
-    const response = await fetch('/project/api/keys')
+    const response = await fetch('/api/keys')
     const data = await response.json()
     setKeys(data.keys)
   }
@@ -39,7 +39,7 @@ const ProjectPage = () => {
           </thead>
           {keys &&
             keys.map((key) => {
-              const url = `${process.env.NEXT_PUBLIC_APP_URL}/project/api/${key}`
+              const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/${key}`
               return (
                 <tr className="bg-gray-900 border-b border-gray-700" key={key}>
                   <th
