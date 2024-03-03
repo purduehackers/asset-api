@@ -10,7 +10,7 @@ const ProjectPage = () => {
   const [keys, setKeys] = useState([])
 
   const fetchAndSetKeys = async () => {
-    const response = await fetch('/api/keys', { next: { revalidate: 10 } })
+    const response = await fetch('/api/keys', { next: { revalidate: 0 } })
     const data = await response.json()
     setKeys(data.keys)
   }
