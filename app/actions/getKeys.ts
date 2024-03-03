@@ -1,6 +1,7 @@
 'use server'
 import { S3Client } from '@aws-sdk/client-s3'
 import { ListObjectsV2Command } from '@aws-sdk/client-s3'
+import { cookies } from 'next/headers'
 
 const S3 = new S3Client({
   region: 'auto',
@@ -13,6 +14,10 @@ const S3 = new S3Client({
 
 // get unique keys from cloudflare r2
 const getKeys = async () => {
+  // this line force this action to not cache the data
+  // https://github.com/vercel/next.js/discussions/50045#discussioncomment-7218266
+  const _cookies = cookies()
+
   const command = new ListObjectsV2Command({
     Bucket: process.env.R2_UPLOAD_BUCKET,
     MaxKeys: 10,
