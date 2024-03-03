@@ -3,8 +3,8 @@
 import Image from 'next/image'
 import { FormEvent, useEffect, useState } from 'react'
 
-import getFile from './actions/getFile'
-import uploadFile from './actions/uploadFile'
+import getFile from './actions/getFetchFileUrl'
+import uploadFile from './actions/getUploadFileUrl'
 
 export default function Home() {
   const [file, setFile] = useState<File | null>(null)

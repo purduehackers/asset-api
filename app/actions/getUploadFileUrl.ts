@@ -12,7 +12,7 @@ const S3 = new S3Client({
   },
 })
 
-const uploadFile = async (formData: FormData) => {
+const getUploadFileUrl = async (formData: FormData) => {
   const preSignedUrl = await getSignedUrl(
     S3,
     new PutObjectCommand({
@@ -26,4 +26,4 @@ const uploadFile = async (formData: FormData) => {
   return preSignedUrl
 }
 
-export default uploadFile
+export default getUploadFileUrl

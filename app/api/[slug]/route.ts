@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import getFile from '../../actions/getFile'
+import getFetchFileUrl from '../../actions/getFetchFileUrl'
 
 interface paramsI {
   params: {
@@ -9,6 +9,6 @@ interface paramsI {
 }
 
 export async function GET(request: Request, { params }: paramsI) {
-  const url = await getFile(params.slug)
+  const url = await getFetchFileUrl(params.slug)
   redirect(url)
 }

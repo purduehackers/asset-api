@@ -11,7 +11,7 @@ const S3 = new S3Client({
   },
 })
 
-const getFile = async (filename: string) => {
+const getFetchFileUrl = async (filename: string) => {
   const preSignedUrl = await getSignedUrl(
     S3,
     new GetObjectCommand({
@@ -25,4 +25,4 @@ const getFile = async (filename: string) => {
   return preSignedUrl
 }
 
-export default getFile
+export default getFetchFileUrl
