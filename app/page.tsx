@@ -1,70 +1,127 @@
 'use client'
+import { useEffect, useState } from 'react'
 
-import Image from 'next/image'
-import { FormEvent, useEffect, useState } from 'react'
+import { Project } from '@/types/Project'
 
-import getFile from './actions/getFetchFileUrl'
-import uploadFile from './actions/getUploadFileUrl'
+const Home = () => {
+  const [projects, setProjects] = useState<Project[]>()
 
-export default function Home() {
-  const [file, setFile] = useState<File | null>(null)
-  const [url, setUrl] = useState<string>('')
-
-  const handleFileUpload = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-
-    if (!file) return
-    const data = new FormData()
-    data.set('file', file)
-    data.set('filename', file.name)
-
-    uploadFile(data)
-      .then((url) => {
-        return fetch(url, {
-          method: 'PUT',
-          body: file,
-        })
-      })
-      .then((res) => {})
+  const getAllProjects = async () => {
+    const response = await fetch(
+      `${process.env.NEXT_PUBLIC_APP_URL}/api/projects`,
+      {
+        method: 'GET',
+      }
+    )
+    const data = await response.json()
+    setProjects(data.projects)
   }
 
-  const setupUrl = async () => {
-    setUrl(await getFile('confusion_martrix.png'))
+  const handleProjectCreate = async (
+    projectName: string,
+    projectUrl: string
+  ) => {
+    const body = {
+      projectName,
+      projectUrl,
+    }
+    await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/projects`, {
+      method: 'POST',
+      body: JSON.stringify(body),
+    })
+    await getAllProjects()
+  }
+
+  const handleFileDelete = async (slug: string) => {
+    const body = {
+      slug,
+    }
+    await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/projects`, {
+      method: 'DELETE',
+      body: JSON.stringify(body),
+    })
+    await getAllProjects()
   }
 
   useEffect(() => {
-    setupUrl()
+    getAllProjects()
   }, [])
 
+  // console.log(postData)
   return (
-    <div>
-      <p>Upload Files</p>
-      <form onSubmit={(e) => handleFileUpload(e)}>
-        <label htmlFor="file-upload">File Upload</label>
-        <br />
-        <input
-          multiple={false}
-          id="file-upload"
-          type="file"
-          onChange={(e) => {
-            if (!e.target.files || e.target.files.length === 0) return
-            setFile(e.target.files[0])
-          }}
-        />
-        <br />
-        <div
-          style={{
-            marginBottom: '10px',
-          }}
-        />
-        <button>Submit</button>
-      </form>
-      <Image
-        src={'http://localhost:3000/api/0_mask.png'}
-        alt=""
-        width={100}
-        height={100}
-      ></Image>
+    <div className="flex items-center justify-center h-screen bg-black">
+      <div className="relative w-1/2 h-screen">
+        <div className="flex justify-end">
+          <button
+            className="px-3 py-2 mb-2 bg-white rounded-lg hover:bg-slate-200"
+            onClick={() => {
+              handleProjectCreate('test my project', 'mytestUrl')
+            }}
+          >
+            insert
+          </button>
+        </div>
+        <div className="overflow-x-auto shadow-md h-3/4 rounded-xl">
+          <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
+            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+              <tr>
+                <th scope="col" className="px-6 py-3">
+                  project
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  project id
+                </th>
+                <th scope="col" className="px-6 py-3">
+                  url
+                </th>
+                <th scope="col" className="px-6 py-3 text-center">
+                  action
+                </th>
+              </tr>
+            </thead>
+            {projects &&
+              projects.map((project) => {
+                const url = `${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`
+                return (
+                  <tr
+                    className="bg-gray-900 border-b border-gray-700"
+                    key={project.slug}
+                  >
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      <a
+                        href={`${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`}
+                      >
+                        {project.name}
+                      </a>
+                    </th>
+                    <th
+                      scope="row"
+                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                    >
+                      {project.slug}
+                    </th>
+                    <td className="px-6 py-4">{project.url}</td>
+                    <td className="px-6 py-4 text-center">
+                      <button
+                        onClick={() => {
+                          handleFileDelete(project.slug)
+                        }}
+                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      >
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
+          </table>
+        </div>
+      </div>
     </div>
   )
 }
+
+export default Home

@@ -2,15 +2,29 @@
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
-import getDeleteFileUrl from '../actions/getDeleteFileUrl'
-import getUploadFileUrl from '../actions/getUploadFileUrl'
-import Copy from '../components/copy'
+import addAssetKeyToProject from '@/app/actions/addAssetKeyToProject'
 
-const ProjectPage = () => {
+import getDeleteFileUrl from '../../actions/getDeleteFileUrl'
+import getUploadFileUrl from '../../actions/getUploadFileUrl'
+import Copy from '../../components/copy'
+
+interface ProjectPageProps {
+  params: {
+    projectSlug: string
+  }
+}
+
+const ProjectPage = ({ params }: ProjectPageProps) => {
   const [keys, setKeys] = useState([])
 
   const fetchAndSetKeys = async () => {
-    const response = await fetch('/api/keys', { next: { revalidate: 0 } })
+    const requestParams = new URLSearchParams({
+      projectSlug: params.projectSlug,
+    })
+
+    const response = await fetch(`/api/projects/keys?${requestParams}`, {
+      next: { revalidate: 0 },
+    })
     const data = await response.json()
     setKeys(data.keys)
   }
@@ -26,6 +40,8 @@ const ProjectPage = () => {
       method: 'PUT',
       body: file,
     })
+
+    addAssetKeyToProject(params.projectSlug, file.name)
     fetchAndSetKeys()
   }
 
@@ -44,7 +60,6 @@ const ProjectPage = () => {
   return (
     <div className="flex items-center justify-center h-screen bg-black">
       <div className="relative w-1/2 h-screen">
-        <div className="h-16">hi</div>
         <div className="flex justify-end">
           <button
             className="px-3 py-2 mb-2 bg-white rounded-lg hover:bg-slate-200"
