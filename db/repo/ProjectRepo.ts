@@ -1,5 +1,6 @@
 import { db } from '../db'
 import GithubSlugger from 'github-slugger'
+import generateRandomColor from '@/utils/generateRandomColor'
 
 const Project = db.Project
 
@@ -26,11 +27,13 @@ const createProject = async (name: string, url: string) => {
   // const existingProjects = await findAll()
   const slugger = new GithubSlugger()
   const projectId = slugger.slug(name)
+  const tailwindColor = generateRandomColor()
   await Project.create({
-    name: name,
+    name,
     slug: projectId,
     url: url,
     assetKeys: [],
+    tailwindColor,
   })
 }
 

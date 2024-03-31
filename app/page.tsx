@@ -5,6 +5,9 @@ import { Project } from '@/types/Project'
 
 const Home = () => {
   const [projects, setProjects] = useState<Project[]>()
+  const [openCreateProject, setOpenCreateProject] = useState(false)
+  const [projectName, setProjectName] = useState('')
+  const [projectUrl, setProjectUrl] = useState('')
 
   const getAllProjects = async () => {
     const response = await fetch(
@@ -43,81 +46,112 @@ const Home = () => {
     await getAllProjects()
   }
 
+  const handleSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault()
+    await handleProjectCreate(projectName, projectUrl)
+    setOpenCreateProject(false)
+    setProjectName('')
+    setProjectUrl('')
+  }
+
   useEffect(() => {
     getAllProjects()
   }, [])
 
-  // console.log(postData)
   return (
-    <div className="flex items-center justify-center h-screen bg-black">
-      <div className="relative w-1/2 h-screen">
-        <div className="flex justify-end">
-          <button
-            className="px-3 py-2 mb-2 bg-white rounded-lg hover:bg-slate-200"
-            onClick={() => {
-              handleProjectCreate('test my project', 'mytestUrl')
-            }}
-          >
-            insert
-          </button>
+    <div className="font-mono">
+      <div className="flex flex-col justify-center py-12 bg-white place-items-center lg:py-0 lg:h-screen gap-y-4">
+        <div className="w-10/12 p-6 bg-white border-4 border-black rounded-sm shadow-blocks shadow-black lg:w-auto">
+          <h1 className="text-4xl font-bold text-center ">
+            h2o: Purdue Hackers Assets API 💧⚡️
+          </h1>
         </div>
-        <div className="overflow-x-auto shadow-md h-3/4 rounded-xl">
-          <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
-            <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-              <tr>
-                <th scope="col" className="px-6 py-3">
-                  project
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  project id
-                </th>
-                <th scope="col" className="px-6 py-3">
-                  url
-                </th>
-                <th scope="col" className="px-6 py-3 text-center">
-                  action
-                </th>
-              </tr>
-            </thead>
+        {openCreateProject && (
+          <div className="absolute z-10 flex flex-col justify-center w-screen h-screen bg-black/50 place-items-center">
+            <div className="absolute z-20 flex flex-col w-8/12 p-6 bg-white border-4 border-black rounded-sm place-items-center shadow-blocks shadow-black lg:w-4/12">
+              <form onSubmit={handleSubmit}>
+                <h1 className="mb-2">Create Project</h1>
+                <div className="mb-6">
+                  <h2>Project Name</h2>
+                  <input
+                    className="border-4 border-black"
+                    required
+                    onChange={(e) => {
+                      setProjectName(e.target.value)
+                    }}
+                  ></input>
+                  <p className="text-red-500">Warning Text</p>
+                  <h2>Project Url</h2>
+                  <input
+                    required
+                    type="email"
+                    className="border-4 border-black"
+                    onChange={(e) => {
+                      setProjectUrl(e.target.value)
+                    }}
+                  ></input>
+                </div>
+                <div className="relative">
+                  <button
+                    className="p-1 px-4 mr-1 bg-white border-4 border-black rounded-sm"
+                    onClick={() => {
+                      setOpenCreateProject(false)
+                    }}
+                  >
+                    Cancel
+                  </button>
+                  <input
+                    type="submit"
+                    value="Create"
+                    className="p-1 px-4 bg-white border-4 border-black rounded-sm hover:cursor-pointer "
+                  />
+                </div>
+              </form>
+            </div>
+          </div>
+        )}
+
+        <div className="flex flex-col w-10/12 p-6 border-4 border-black rounded-sm place-items-center h-4/6 shadow-blocks shadow-black lg:w-8/12">
+          <button
+            onClick={() => {
+              setOpenCreateProject(true)
+            }}
+            className="p-2 text-white bg-black border-4 border-black rounded-sm w-fit shadow-blocks shadow-sky-300"
+          >
+            Create Project
+          </button>
+          <div className="mt-4"></div>
+          <div className="flex-col flex-1 w-full overflow-y-scroll">
             {projects &&
               projects.map((project) => {
                 const url = `${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`
                 return (
-                  <tr
-                    className="bg-gray-900 border-b border-gray-700"
+                  <div
                     key={project.slug}
+                    style={{ backgroundColor: project.tailwindColor }}
+                    className="relative flex flex-col justify-center h-32 p-6 mb-4 border-4 border-black"
                   >
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      <a
-                        href={`${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`}
-                      >
-                        {project.name}
-                      </a>
-                    </th>
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
-                    >
-                      {project.slug}
-                    </th>
-                    <td className="px-6 py-4">{project.url}</td>
-                    <td className="px-6 py-4 text-center">
+                    <div className="text-xl capitalize">{project.name}</div>
+                    <div className="absolute flex flex-col bottom-2 right-2">
                       <button
+                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm"
                         onClick={() => {
                           handleFileDelete(project.slug)
                         }}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
                       >
                         Delete
                       </button>
-                    </td>
-                  </tr>
+                      <a
+                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm "
+                        href={`${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`}
+                      >
+                        Enter
+                      </a>
+                    </div>
+                  </div>
                 )
               })}
-          </table>
+          </div>
         </div>
       </div>
     </div>

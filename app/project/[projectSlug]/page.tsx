@@ -60,6 +60,14 @@ const ProjectPage = ({ params }: ProjectPageProps) => {
   return (
     <div className="flex items-center justify-center h-screen bg-black">
       <div className="relative w-1/2 h-screen">
+        <div className="flex justify-start">
+          <a
+            className="px-3 py-2 mb-2 text-white underline"
+            href={process.env.NEXT_PUBLIC_APP_URL}
+          >
+            {`<`} back
+          </a>
+        </div>
         <div className="flex justify-end">
           <button
             className="px-3 py-2 mb-2 bg-white rounded-lg hover:bg-slate-200"
@@ -81,7 +89,8 @@ const ProjectPage = ({ params }: ProjectPageProps) => {
             }}
           />
         </div>
-        <div className="overflow-x-auto shadow-md h-3/4 rounded-xl">
+
+        <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
           <table className="w-full text-sm text-left text-gray-500 rtl:text-right dark:text-gray-400">
             <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
               <tr>
@@ -99,39 +108,41 @@ const ProjectPage = ({ params }: ProjectPageProps) => {
                 </th>
               </tr>
             </thead>
-            {keys &&
-              keys.map((key) => {
-                const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/${key}`
-                return (
-                  <tr
-                    className="bg-gray-900 border-b border-gray-700"
-                    key={key}
-                  >
-                    <th
-                      scope="row"
-                      className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+            <tbody>
+              {keys &&
+                keys.map((key) => {
+                  const url = `${process.env.NEXT_PUBLIC_APP_URL}/api/${key}`
+                  return (
+                    <tr
+                      className="bg-gray-800 border-b border-gray-700 hover:bg-gray-600"
+                      key={key}
                     >
-                      {key}
-                    </th>
-                    <td className="px-6 py-4">
-                      <Image src={url} alt={key} width={100} height={100} />
-                    </td>
-                    <td className="px-6 py-4">
-                      {url} <Copy url={url} />
-                    </td>
-                    <td className="px-6 py-4 text-center">
-                      <button
-                        onClick={() => {
-                          handleFileDelete(key)
-                        }}
-                        className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                      <th
+                        scope="row"
+                        className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
                       >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                )
-              })}
+                        {key}
+                      </th>
+                      <td className="px-6 py-4">
+                        <Image src={url} alt={key} width={100} height={100} />
+                      </td>
+                      <td className="px-6 py-4">
+                        {url} <Copy url={url} />
+                      </td>
+                      <td className="px-6 py-4 text-center">
+                        <button
+                          onClick={() => {
+                            handleFileDelete(key)
+                          }}
+                          className="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  )
+                })}
+            </tbody>
           </table>
         </div>
       </div>

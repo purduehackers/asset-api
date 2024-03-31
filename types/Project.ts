@@ -5,6 +5,7 @@ export interface Project {
   assetKeys: string[]
   slug: string
   url: string
+  tailwindColor: string
 }
 
 export interface ProjectDocument extends Project, Document {}
