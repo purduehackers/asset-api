@@ -21,7 +21,7 @@ const generateRandomColor = () => {
     colors.rose,
   ]
   const randomIndex = Math.floor(Math.random() * myColors.length)
-  return myColors[randomIndex][200]
+  return [myColors[randomIndex][200], myColors[randomIndex][300]]
 }
 
 export default generateRandomColor

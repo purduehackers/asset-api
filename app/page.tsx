@@ -80,11 +80,11 @@ const Home = () => {
                       setProjectName(e.target.value)
                     }}
                   ></input>
-                  <p className="text-red-500">Warning Text</p>
+                  {/* <p className="text-red-500">Warning Text</p> */}
                   <h2>Project Url</h2>
                   <input
                     required
-                    type="email"
+                    type="url"
                     className="border-4 border-black"
                     onChange={(e) => {
                       setProjectUrl(e.target.value)
@@ -93,7 +93,7 @@ const Home = () => {
                 </div>
                 <div className="relative">
                   <button
-                    className="p-1 px-4 mr-1 bg-white border-4 border-black rounded-sm"
+                    className="p-1 px-4 mr-1 bg-white border-4 border-black rounded-sm hover:bg-red-300"
                     onClick={() => {
                       setOpenCreateProject(false)
                     }}
@@ -103,7 +103,7 @@ const Home = () => {
                   <input
                     type="submit"
                     value="Create"
-                    className="p-1 px-4 bg-white border-4 border-black rounded-sm hover:cursor-pointer "
+                    className="p-1 px-4 bg-white border-4 border-black rounded-sm hover:cursor-pointer hover:bg-sky-300"
                   />
                 </div>
               </form>
@@ -116,7 +116,7 @@ const Home = () => {
             onClick={() => {
               setOpenCreateProject(true)
             }}
-            className="p-2 text-white bg-black border-4 border-black rounded-sm w-fit shadow-blocks shadow-sky-300"
+            className="p-2 text-white bg-black border-4 border-black rounded-sm w-fit shadow-blocks shadow-sky-300 hover:shadow-sky-400"
           >
             Create Project
           </button>
@@ -125,16 +125,19 @@ const Home = () => {
             {projects &&
               projects.map((project) => {
                 const url = `${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`
+
+                const backgroundColor = project.color
+
                 return (
                   <div
                     key={project.slug}
-                    style={{ backgroundColor: project.tailwindColor }}
+                    style={{ backgroundColor: backgroundColor }}
                     className="relative flex flex-col justify-center h-32 p-6 mb-4 border-4 border-black"
                   >
                     <div className="text-xl capitalize">{project.name}</div>
                     <div className="absolute flex flex-col bottom-2 right-2">
                       <button
-                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm"
+                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm hover:bg-red-300"
                         onClick={() => {
                           handleFileDelete(project.slug)
                         }}
@@ -142,7 +145,7 @@ const Home = () => {
                         Delete
                       </button>
                       <a
-                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm "
+                        className="p-1 px-4 mt-1 bg-white border-4 border-black rounded-sm hover:bg-sky-300"
                         href={`${process.env.NEXT_PUBLIC_APP_URL}/project/${project.slug}`}
                       >
                         Enter

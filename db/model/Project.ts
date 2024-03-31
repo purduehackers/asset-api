@@ -7,7 +7,8 @@ const ProjectSchema = new mongoose.Schema<ProjectDocument, IProjectModel>(
     assetKeys: { type: [String], required: true },
     slug: { type: String, required: true, index: true, unique: true },
     url: { type: String, required: true, unique: true },
-    tailwindColor: { type: String, required: true },
+    color: { type: String, required: true },
+    hoverColor: { type: String, required: true },
   },
   {
     timestamps: true,

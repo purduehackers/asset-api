@@ -27,13 +27,14 @@ const createProject = async (name: string, url: string) => {
   // const existingProjects = await findAll()
   const slugger = new GithubSlugger()
   const projectId = slugger.slug(name)
-  const tailwindColor = generateRandomColor()
+  const [color, hoverColor] = generateRandomColor()
   await Project.create({
     name,
     slug: projectId,
     url: url,
     assetKeys: [],
-    tailwindColor,
+    color,
+    hoverColor,
   })
 }
 
